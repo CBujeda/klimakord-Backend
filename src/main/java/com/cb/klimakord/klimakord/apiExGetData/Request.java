@@ -21,15 +21,23 @@ import java.awt.image.BufferedImage;
 
 import org.apache.tomcat.util.json.JSONParser;
 
-import com.cb.klimakord.klimakord.procesor.TransparentTransformation;
+
 
 public class Request {
+
+	
+	
+	
+	public Request() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Pre:
 	 * Post: Api get wheather data
 	 */
-	public static String getDataWeather(String mlat,String mlon) {
+	public String getDataWeather(String mlat,String mlon) {
 		String apiKey = "fa73231ed639de04e5b94302afa495cd";
 		String api = "https://api.openweathermap.org/data/2.5/weather?lat="+mlat+"&lon="+mlon+"&appid="+ apiKey + "";
 		URL url = null;
@@ -63,7 +71,11 @@ public class Request {
 		return inline;
 	}
 	
-	public static BufferedImage getTile(String x,String y, String z, String level) {
+	/*
+	 * Pre:---
+	 * Post: 
+	 */
+	public BufferedImage getTile(String x,String y, String z, String level) {
 
 		
 		String apiDefault = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"+z+"/"+y+"/"+x;
@@ -73,35 +85,29 @@ public class Request {
 		
 	}
 	
-	public static BufferedImage mapFusion(String link,String link2) {
+	/*
+	 * Pre:---
+	 * Post: Fusión de imagenes
+	 */
+	public BufferedImage mapFusion(String link,String link2) {
 		
 		BufferedImage combined = new BufferedImage (256,256,BufferedImage.TYPE_INT_ARGB);
 		try {
-		URL url = new URL(link);
-		InputStream in1 = new BufferedInputStream(url.openStream());
-		URL url2 = new URL(link2);
-		InputStream in2 = new BufferedInputStream(url2.openStream());
-		// base path of the images // load source images 
-		BufferedImage image = ImageIO.read(in1); 
-		BufferedImage overlay = ImageIO.read(in2); 
-		//TransparentTransformation transparent = new TransparentTransformation(overlay);
-		//overlay = transparent.makeColorTransparent(new Color(0, 0, 255));
-		//ImageIO.write(image, "PNG", new File("./data/image.png"));
-		//ImageIO.write(overlay, "PNG", new File("./data/overlay.png"));
-		
-		// create the new image, canvas size is the max. of both image sizes 
-		int w = Math.max(image.getWidth(), overlay.getWidth()); 
-		int h = Math.max(image.getHeight(), overlay.getHeight()); 
-		combined = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB); 
-		// paint both images, preserving the alpha channels 
-		Graphics g = combined.getGraphics(); 
-		g.drawImage(image, 0, 0, null);
-		g.drawImage(overlay, 0, 0, null); 
-		// Save as new image 
-		
-		//ImageIO.write(combined, "PNG", new File("./data/combined.png"));
+			URL url = new URL(link);
+			InputStream in1 = new BufferedInputStream(url.openStream());
+			URL url2 = new URL(link2);
+			InputStream in2 = new BufferedInputStream(url2.openStream());
+			BufferedImage image = ImageIO.read(in1); 
+			BufferedImage overlay = ImageIO.read(in2); 
+			int w = Math.max(image.getWidth(), overlay.getWidth()); 
+			int h = Math.max(image.getHeight(), overlay.getHeight()); 
+			combined = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB); 
+			Graphics g = combined.getGraphics(); 
+			g.drawImage(image, 0, 0, null);
+			g.drawImage(overlay, 0, 0, null); 
+		}catch (MalformedURLException e1) {
+			e1.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return combined;

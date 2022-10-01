@@ -13,33 +13,55 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.awt.image.BufferedImage;
 import com.cb.klimakord.klimakord.apiExGetData.Request;
+import com.cb.klimakord.klimakord.services.CacheService;
 
 @Controller
+@RequestMapping("/api/")
 public class TileController {
-@RequestMapping(value = "tile/{x}/{y}/{z}/{a}/key=/{key}", method = RequestMethod.GET, produces = "image/jpg")
-public @ResponseBody byte[] getFile(@PathVariable("x") String x
+
+	private final CacheService cache;
+		
+	public TileController(CacheService cache) {
+		this.cache = cache;
+	}
+	
+	@RequestMapping(value = "tile/{x}/{y}/{z}/{a}/key=/{key}", method = RequestMethod.GET, produces = "image/jpg")
+	public @ResponseBody byte[] getFile(@PathVariable("x") String x
 							,@PathVariable("y") String y
 							,@PathVariable("z") String z
 							,@PathVariable("a") String a
 							,@PathVariable("key") String key)  {
+
+		if(cache.existe(x, y, z, a, key)) { // buscar los en java
+			return (byte[]) cache.getCahe(x, y, z, a, key);
+		}else {
+			byte[] rvalid = cargador(x,y,z,a,key);
+			cache.saveCache(x, y, z, a, key, rvalid);
+			return rvalid;
+		}
+		
+		
 	
-	if(StartController.keyValid(key)) {
-		 try {
-		        BufferedImage img = Request.getTile(x,y,z,a);
-		        // Create a byte array output stream.
-		        ByteArrayOutputStream bao = new ByteArrayOutputStream();
-		        // Write to output stream
-		        ImageIO.write(img, "png", bao);
-		        return bao.toByteArray();
-		    } catch (IOException e) {
-		        System.out.println(e);
-		        return new byte[1];
-		    }
-	}else {
-		 return new byte[1];
 	}
 	
-   
 	
-}
+	private byte[] cargador(String x, String y, String z,String a, String key ) {
+		if(StartController.keyValid(key)) {
+			 try {
+				 	Request r = new Request();
+				 	
+			        BufferedImage img = r.getTile(x,y,z,a);
+			        // Create a byte array output stream.
+			        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			        // Write to output stream
+			        ImageIO.write(img, "png", bao);
+			        return bao.toByteArray();
+			    } catch (IOException e) {
+			        System.out.println(e);
+			        return new byte[1];
+			    }
+		}else {
+			 return new byte[1];
+		}
+	}
 }
