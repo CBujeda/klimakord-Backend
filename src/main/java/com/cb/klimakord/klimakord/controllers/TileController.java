@@ -22,21 +22,24 @@ public @ResponseBody byte[] getFile(@PathVariable("x") String x
 							,@PathVariable("z") String z
 							,@PathVariable("a") String a
 							,@PathVariable("key") String key)  {
-    try {
-    	System.out.println("Carga");
-        BufferedImage img = Request.getTile(x,y,z,a);
-
-        // Create a byte array output stream.
-        ByteArrayOutputStream bao = new ByteArrayOutputStream();
-
-        // Write to output stream
-        ImageIO.write(img, "png", bao);
-
-        return bao.toByteArray();
-    } catch (IOException e) {
-        System.out.println(e);
-        return new byte[1];
-    }
+	
+	if(StartController.keyValid(key)) {
+		 try {
+		        BufferedImage img = Request.getTile(x,y,z,a);
+		        // Create a byte array output stream.
+		        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+		        // Write to output stream
+		        ImageIO.write(img, "png", bao);
+		        return bao.toByteArray();
+		    } catch (IOException e) {
+		        System.out.println(e);
+		        return new byte[1];
+		    }
+	}else {
+		 return new byte[1];
+	}
+	
+   
 	
 }
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StartController {
 	
 	
-	public boolean keyValid(String key) {
+	public static boolean keyValid(String key) {
 		ArrayList<String> array = new ArrayList<String>();
 		array.add("cb-clara-key");
 		array.add("cb-blas-key");
