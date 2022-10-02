@@ -25,12 +25,8 @@ import org.apache.tomcat.util.json.JSONParser;
 
 public class Request {
 
-	
-	
-	
 	public Request() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -57,7 +53,6 @@ public class Request {
 		if (responsecode != 200) {
 		    throw new RuntimeException("HttpResponseCode: " + responsecode);
 		} else {
-		    
 		    Scanner scanner;
 			try {
 				scanner = new Scanner(url.openStream());
@@ -73,21 +68,17 @@ public class Request {
 	
 	/*
 	 * Pre:---
-	 * Post: 
+	 * Post: Metodo el cual devuelve la tile
 	 */
 	public BufferedImage getTile(String x,String y, String z, String level) {
-
-		
 		String apiDefault = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/"+z+"/"+y+"/"+x;
 		String apiOcean = "https://www.floodmap.net/getFMTile.ashx?x="+x+"&y="+y+"&z="+z+"&e="+level;
 		return mapFusion(apiDefault,apiOcean);
-		
-		
 	}
 	
 	/*
 	 * Pre:---
-	 * Post: Fusión de imagenes
+	 * Post: Metodo el cual genera el tile fusionandolos
 	 */
 	public BufferedImage mapFusion(String link,String link2) {
 		
@@ -112,6 +103,4 @@ public class Request {
 		}
 		return combined;
 	}
-	
-	
 }

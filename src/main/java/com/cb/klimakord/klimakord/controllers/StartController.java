@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cb.klimakord.klimakord.apiExGetData.Request;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +42,10 @@ public class StartController {
 	
 	/*
 	 * Pre:---
-	 * Post:
-
+	 * Post: Programa java el cual devuelve la altura del
+	 * 		 mar dependiendo de diferentes variables
 	 */
+	@CrossOrigin
 	@GetMapping("time/ano=/{ano}/vehiculos=/{vehi}/industrias=/{indus}/agicolas=/{agric}/viviendas=/{viv}/otros=/{otr}/key=/{key}")
 	public String inicio(@PathVariable("ano") String ano
 			,@PathVariable("vehi") String vehi
@@ -66,29 +68,19 @@ public class StartController {
 				long dAgric = Integer.parseInt(agric);
 				long dViv = Integer.parseInt(viv);
 				long dOtr = Integer.parseInt(otr);
-				final double total = 
-						(dVehi/100*bVehi)+(dIndus/100*bIndus)+
-						(dAgric/100*bAgric)+(dViv/100*bViv)+(dOtr/100*bOtr);
+				final double total = (dVehi/100*bVehi)+(dIndus/100*bIndus)+
+									 (dAgric/100*bAgric)+(dViv/100*bViv)+(dOtr/100*bOtr);
 				LocalDate current_date = LocalDate.now();
 				long current_Year = current_date.getYear();
-	            System.out.println("Current year: "+current_Year);
-				
-	            long real_years = dAno - current_Year;
-	            System.out.println(real_years);
-	            
+	            long real_years = dAno - current_Year;       
 	            double msubidaY = 0.0107*total;
-	            
-	            
-	            
 	            double metros = msubidaY * real_years;
-	            data = metros + "";
+	            if(metros < 0) {metros = 0;}
+	            data = "{\"altmeters\": "+metros + "}";
 			} catch(Exception e) {
 				data ="err";
 				System.out.println(e);
 			}
-			
-		}else {
-			
 		}
 		return data; // envio de la array
 	}
@@ -97,6 +89,7 @@ public class StartController {
 	 * Pre:---
 	 * Post: Controller el cual devuelve una temperatura
 	 */
+	@CrossOrigin
 	@GetMapping("weather/{lat}/{lon}/key=/{key}")
 	public String tempo(@PathVariable("lat") String lat
 					   ,@PathVariable("lon") String lon
@@ -104,13 +97,10 @@ public class StartController {
 		String vuelta = "-1";
 		if(keyValid(key)) {
 			Request r = new Request();
-			
 			vuelta = r.getDataWeather(lat,lon);
 		}else {
 			vuelta ="{ERROR - NO KEY}";
 		}
-		
 		return vuelta;
-		
 	}
 }
