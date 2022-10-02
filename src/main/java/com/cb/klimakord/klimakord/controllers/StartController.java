@@ -73,7 +73,7 @@ public class StartController {
 				LocalDate current_date = LocalDate.now();
 				long current_Year = current_date.getYear();
 	            long real_years = dAno - current_Year;       
-	            double msubidaY = 0.0107*total;
+	            double msubidaY = 0.0039*total;
 	            double metros = msubidaY * real_years;
 	            if(metros < 0) {metros = 0;}
 	            data = "{\"altmeters\": "+metros + "}";
