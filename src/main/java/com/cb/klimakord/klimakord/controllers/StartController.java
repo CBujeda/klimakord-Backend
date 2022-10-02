@@ -24,12 +24,6 @@ public class StartController {
 	public static boolean keyValid(String key) {
 		ArrayList<String> array = new ArrayList<String>();
 		array.add("cb-default-key");
-		array.add("cb-clara-key");
-		array.add("cb-blas-key");
-		array.add("cb-elias-key");
-		array.add("cb-raul-key");
-		array.add("cb-almendivar-key");
-		array.add("cb-silva-key");
 		boolean very = false;
 		for(int i = 0; i < array.size();i++) {
 			if(array.get(i).equalsIgnoreCase(key)) {
